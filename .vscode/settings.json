@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Nuber"]
+  "cSpell.words": ["Nuber"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
