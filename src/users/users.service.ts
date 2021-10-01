@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MutationOutput } from '@src/common/dto/common.dto';
+import { CoreOutput } from '@src/common/dto/common.dto';
 import { User } from '@src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.dto';
-import { FindUserInput, FindUserOutput } from './dto/find-user.dto';
+import {
+  FindByEmailInput,
+  FindByIdInput,
+  FindUserOutput,
+} from './dto/find-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,13 +16,16 @@ export class UsersService {
     @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
 
-  async findById({ id }: FindUserInput): Promise<FindUserOutput> {
-    const user = await this.users.findOne({ id });
+  async findUser(
+    input: FindByIdInput | FindByEmailInput,
+  ): Promise<FindUserOutput> {
+    const { id, email } = input;
+    const user = await this.users.findOne(id ? { id } : { email });
     if (!user) return { ok: false, error: 'User not found' };
     return { ok: true, user };
   }
 
-  async create(input: CreateUserInput): Promise<MutationOutput> {
+  async createUser(input: CreateUserInput): Promise<CoreOutput> {
     const { email } = input;
     const exist = await this.users.findOne({ email });
     if (exist) return { ok: false, error: 'User already exists' };

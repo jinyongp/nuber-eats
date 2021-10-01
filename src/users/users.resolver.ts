@@ -1,7 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { HandleError } from '@src/common/common.decorator';
 import { CreateUserInput, CreateUserOutput } from './dto/create-user.dto';
-import { FindUserInput, FindUserOutput } from './dto/find-user.dto';
+import {
+  FindByEmailInput,
+  FindByIdInput,
+  FindUserOutput,
+} from './dto/find-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -11,8 +15,16 @@ export class UsersResolver {
 
   @Query(() => FindUserOutput)
   @HandleError()
-  async findUser(@Args('input') input: FindUserInput): Promise<FindUserOutput> {
-    return this.usersService.findById(input);
+  async findById(@Args('input') input: FindByIdInput): Promise<FindUserOutput> {
+    return this.usersService.findUser(input);
+  }
+
+  @Query(() => FindUserOutput)
+  @HandleError()
+  async findByEmail(
+    @Args('input') input: FindByEmailInput,
+  ): Promise<FindUserOutput> {
+    return this.usersService.findUser(input);
   }
 
   @Mutation(() => CreateUserOutput)
@@ -20,6 +32,6 @@ export class UsersResolver {
   async createUser(
     @Args('input') input: CreateUserInput,
   ): Promise<CreateUserOutput> {
-    return this.usersService.create(input);
+    return this.usersService.createUser(input);
   }
 }
