@@ -7,7 +7,6 @@ import {
 } from '@nestjs/graphql';
 import { CoreEntity } from '@src/common/entities/core.entity';
 import bcrypt from 'bcrypt';
-import { Exclude } from 'class-transformer';
 import { IsEmail, IsEnum, IsString } from 'class-validator';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
@@ -37,10 +36,9 @@ export class UserWithoutPassword extends CoreEntity {
 @ObjectType()
 @Entity()
 export class User extends UserWithoutPassword {
-  @Column({ select: false })
+  @Column()
   @Field(() => String)
   @IsString()
-  @Exclude({ toPlainOnly: true, toClassOnly: true })
   password!: string;
 
   @BeforeInsert()
