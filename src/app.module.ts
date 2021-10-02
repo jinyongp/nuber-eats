@@ -5,19 +5,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@src/users/entities/user.entity';
 import { UsersModule } from '@src/users/users.module';
 import Joi from 'joi';
-import { join } from 'path';
-import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env/.env.${process.env.NODE_ENV}`,
+      envFilePath: `.env/${process.env.NODE_ENV}.env`,
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
+        NODE_ENV: Joi.string().valid('dev', 'test', 'prod').default('dev'),
+        DB_HOST: Joi.string().default('localhost'),
+        DB_PORT: Joi.number().default(5432),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().allow(''),
         DB_DATABASE: Joi.string().required(),
@@ -34,12 +32,12 @@ import { CommonModule } from './common/common.module';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
       entities: [User],
+      cache: true,
     }),
     GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), './schema.gql'),
+      autoSchemaFile: true,
     }),
     UsersModule,
-    CommonModule,
   ],
 })
 export class AppModule {}
