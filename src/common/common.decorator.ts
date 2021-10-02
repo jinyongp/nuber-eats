@@ -1,4 +1,4 @@
-export function HandleError(message: string = '') {
+export function HandleError(message = '') {
   return function (
     target: any,
     property: string,
