@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthUser } from '@src/auth/auth.decorator';
 import { AuthService } from '@src/auth/auth.service';
 import { HandleError } from '@src/common/common.decorator';
 import { CreateUserInput } from './dto/create-user.dto';
@@ -27,6 +28,14 @@ export class UsersResolver {
     @Args('input') input: FindByEmailInput,
   ): Promise<UserOutput> {
     return this.usersService.findUser(input);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Query(() => UserOutput)
+  @HandleError()
+  async getCurrentUser(@AuthUser() user: User): Promise<UserOutput> {
+    if (!user) return { error: 'No User Authenticated' };
+    return { user };
   }
 
   @Mutation(() => TokenOutput)
