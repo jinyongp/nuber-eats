@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthService } from '@src/auth/auth.service';
 import { HandleError } from '@src/common/common.decorator';
 import { CreateUserInput } from './dto/create-user.dto';
 import { FindByEmailInput, FindByIdInput } from './dto/find-user.dto';
@@ -9,7 +10,10 @@ import { UsersService } from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Query(() => UserOutput)
   @HandleError()
@@ -36,7 +40,8 @@ export class UsersResolver {
     const check = await user.checkPassword(password);
     if (!check) return { error: 'Wrong password' };
 
-    return { token: '1234' };
+    const token = this.authService.sign(user.id);
+    return { token };
   }
 
   @Mutation(() => UserOutput)

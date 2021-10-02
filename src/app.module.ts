@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '@src/auth/auth.module';
 import { User } from '@src/users/entities/user.entity';
 import { UsersModule } from '@src/users/users.module';
 import Joi from 'joi';
@@ -9,7 +10,6 @@ import Joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
       envFilePath: `.env/${process.env.NODE_ENV}.env`,
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
       validationSchema: Joi.object({
@@ -38,6 +38,9 @@ import Joi from 'joi';
       autoSchemaFile: true,
     }),
     UsersModule,
+    AuthModule.forRoot({
+      privateKey: process.env.JWT_SECRET_KEY,
+    }),
   ],
 })
 export class AppModule {}
