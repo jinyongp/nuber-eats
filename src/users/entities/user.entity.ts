@@ -47,7 +47,8 @@ export class User extends CoreEntity {
   async hashPassword(): Promise<void> {
     if (!this.password) return;
     try {
-      this.password = await bcrypt.hash(this.password, 10);
+      const salt = await bcrypt.genSalt(+process.env.BCRYPT_ROUNDS);
+      this.password = await bcrypt.hash(this.password, salt);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
