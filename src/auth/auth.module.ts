@@ -1,12 +1,12 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
-import { CONFIG_OPTIONS } from './auth.constant';
-import { DynamicModuleOptions } from './auth.interface';
+import { CONFIG_OPTIONS } from '@src/common/constants';
+import { AuthModuleOptions } from './auth.interface';
 import { AuthService } from './auth.service';
 
 @Module({})
 @Global()
 export class AuthModule {
-  static forRoot(options: DynamicModuleOptions): DynamicModule {
+  static forRoot(options: AuthModuleOptions): DynamicModule {
     return {
       module: AuthModule,
       exports: [AuthService],

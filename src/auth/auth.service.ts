@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { CONFIG_OPTIONS } from '@src/common/constants';
 import jwt from 'jsonwebtoken';
-import { CONFIG_OPTIONS } from './auth.constant';
-import { DynamicModuleOptions } from './auth.interface';
+import { AuthModuleOptions } from './auth.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(CONFIG_OPTIONS) private readonly options: DynamicModuleOptions,
+    @Inject(CONFIG_OPTIONS) private readonly options: AuthModuleOptions,
   ) {}
 
   sign(id: number): string {
