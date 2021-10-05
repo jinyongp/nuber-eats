@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NestMiddleware,
-} from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { UsersService } from '@src/users/users.service';
 import { NextFunction, Response } from 'express';
 import { MiddlewareRequest } from './auth.interface';
@@ -21,7 +17,6 @@ export class AuthMiddleware implements NestMiddleware {
       const decoded = this.authService.verify(
         req.headers['access_token'].toString(),
       );
-
       if (typeof decoded === 'string') return next();
 
       const { user } = await this.userService.findUser({ id: decoded.id });
@@ -30,7 +25,8 @@ export class AuthMiddleware implements NestMiddleware {
 
       next();
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      console.error(error);
+      next();
     }
   }
 }
