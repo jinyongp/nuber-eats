@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthMiddleware } from '@src/auth/auth.middleware';
 import { AuthModule } from '@src/auth/auth.module';
 import { User } from '@src/users/entities/user.entity';
+import { Verification } from '@src/users/entities/verification.entity';
 import { UsersModule } from '@src/users/users.module';
 import Joi from 'joi';
 
@@ -37,7 +38,7 @@ import Joi from 'joi';
       database: process.env.DB_DATABASE,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
-      entities: [User],
+      entities: [User, Verification],
       cache: true,
     }),
     GraphQLModule.forRoot({

@@ -2,11 +2,13 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '@src/auth/auth.decorator';
 import { AuthService } from '@src/auth/auth.service';
 import { HandleError } from '@src/common/common.decorator';
+import { CoreOutput } from '@src/common/dto/common.dto';
 import { CreateUserInput } from './dto/create-user.dto';
 import { FindByEmailInput, FindByIdInput } from './dto/find-user.dto';
 import { SignInInput } from './dto/sign-in.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
 import { TokenOutput, UserOutput } from './dto/user.dto';
+import { VerifyEmailInput } from './dto/verify-email.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -63,5 +65,14 @@ export class UsersResolver {
   ): Promise<UserOutput> {
     if (!user) return { error: 'No user authenticated' };
     return await this.usersService.updateUser(user, input);
+  }
+
+  @Mutation(() => CoreOutput)
+  @HandleError()
+  async verifyEmail(
+    @Args('input') { code }: VerifyEmailInput,
+  ): Promise<CoreOutput> {
+    const verified = await this.usersService.verifyEmail(code);
+    return verified ? {} : { error: 'Verification is invalid' };
   }
 }

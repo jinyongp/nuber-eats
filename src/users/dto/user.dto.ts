@@ -1,10 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from '@src/common/dto/common.dto';
-import { User, UserWithoutPassword } from '@src/users/entities/user.entity';
+import { User } from '../entities/user.entity';
 
 @ObjectType()
 export class UserOutput extends CoreOutput {
-  @Field(() => UserWithoutPassword, { nullable: true })
+  @Field(() => User, { nullable: true })
   user?: User;
 }
 
