@@ -1,8 +1,8 @@
 {
   "name": "nuber-eats-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "The Backend of Nuber Eats Clone: NestJS, TypeORM, Jest, GraphQL",
+  "author": "jinyongp",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
