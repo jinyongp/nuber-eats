@@ -67,6 +67,7 @@ export class UsersService {
     if (verification) {
       verification.user.emailVerified = true;
       await this.users.save(verification.user);
+      await this.verifications.delete(verification.id);
       return true;
     }
     return false;

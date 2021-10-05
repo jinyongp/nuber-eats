@@ -19,6 +19,6 @@ export class Verification extends CoreEntity {
 
   @BeforeInsert()
   createCode(): void {
-    this.code = Math.random().toString(36).slice(-5).toUpperCase();
+    this.code = Math.random().toString(36).slice(-8).toUpperCase();
   }
 }
