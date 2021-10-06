@@ -9,6 +9,9 @@ declare namespace NodeJS {
       DB_DATABASE: string;
       BCRYPT_ROUNDS: number;
       JWT_SECRET_KEY: string;
+      MAILGUN_API_KEY: string;
+      MAILGUN_DOMAIN: string;
+      MAILGUN_FROM_EMAIL: string;
     };
   }
 }

@@ -7,12 +7,13 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthMiddleware } from '@src/auth/auth.middleware';
-import { AuthModule } from '@src/auth/auth.module';
-import { User } from '@src/users/entities/user.entity';
-import { Verification } from '@src/users/entities/verification.entity';
-import { UsersModule } from '@src/users/users.module';
 import Joi from 'joi';
+import { AuthMiddleware } from './auth/auth.middleware';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
+import { User } from './users/entities/user.entity';
+import { Verification } from './users/entities/verification.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -26,7 +27,11 @@ import Joi from 'joi';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().allow(''),
         DB_DATABASE: Joi.string().required(),
+        BCRYPT_ROUNDS: Joi.number().required(),
         JWT_SECRET_KEY: Joi.string().required(),
+        MAILGUN_API_KEY: Joi.string().required(),
+        MAILGUN_DOMAIN: Joi.string().required(),
+        MAILGUN_FROM_EMAIL: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -48,6 +53,11 @@ import Joi from 'joi';
     UsersModule,
     AuthModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY,
+    }),
+    MailModule.forRoot({
+      apiKey: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN,
+      from: process.env.MAILGUN_FROM_EMAIL,
     }),
   ],
 })
