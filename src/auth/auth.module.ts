@@ -1,5 +1,5 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
-import { CONFIG_OPTIONS } from '@src/common/constants';
+import { CONFIG_OPTIONS } from '../common/constants';
 import { AuthModuleOptions } from './auth.interface';
 import { AuthService } from './auth.service';
 

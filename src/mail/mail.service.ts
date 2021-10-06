@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CONFIG_OPTIONS } from '@src/common/constants';
 import FromData from 'form-data';
 import got from 'got';
+import { CONFIG_OPTIONS } from '../common/constants';
 import { EmailVariable, MailModuleOptions } from './mail.interface';
 
 @Injectable()

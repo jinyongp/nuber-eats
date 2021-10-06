@@ -1,8 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthUser } from '@src/auth/auth.decorator';
-import { AuthService } from '@src/auth/auth.service';
-import { HandleError } from '@src/common/common.decorator';
-import { CoreOutput } from '@src/common/dto/common.dto';
+import { AuthUser } from '../auth/auth.decorator';
+import { AuthService } from '../auth/auth.service';
+import { HandleError } from '../common/common.decorator';
+import { CoreOutput } from '../common/dto/common.dto';
 import { CreateUserInput } from './dto/create-user.dto';
 import { FindByEmailInput, FindByIdInput } from './dto/find-user.dto';
 import { SignInInput } from './dto/sign-in.dto';
