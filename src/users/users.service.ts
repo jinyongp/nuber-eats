@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MailService } from '../mail/mail.service';
 import { CreateUserInput } from './dto/create-user.dto';
 import { FindByEmailInput, FindByIdInput } from './dto/find-user.dto';
 import { SignInInput } from './dto/sign-in.dto';
@@ -15,6 +16,7 @@ export class UsersService {
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Verification)
     private readonly verifications: Repository<Verification>,
+    private readonly mailService: MailService,
   ) {}
 
   async findUser(input: FindByIdInput | FindByEmailInput): Promise<UserOutput> {
@@ -43,7 +45,10 @@ export class UsersService {
     const exist = await this.users.findOne({ email });
     if (exist) return { error: 'User already exists' };
     const user = await this.users.save(this.users.create(input));
-    await this.verifications.save(this.verifications.create({ user }));
+    const { code } = await this.verifications.save(
+      this.verifications.create({ user }),
+    );
+    this.mailService.sendVerificationEmail(user.email, code);
     return { user };
   }
 
@@ -53,7 +58,8 @@ export class UsersService {
       user.emailVerified = false;
       await this.verifications.delete({ user: { id: user.id } });
       const verification = this.verifications.create({ user });
-      await this.verifications.save(verification);
+      const { code } = await this.verifications.save(verification);
+      this.mailService.sendVerificationEmail(user.email, code);
     }
     await this.users.save(user);
     return { user };
